@@ -8,9 +8,9 @@ _This bot currently still in development_
 ## To Install
 To install do the following:
 * Clone the repository
-* Compile with Visual Studio, and it should be ready to go
-* Modify [*config.json*](config.json) with your bot token and other settings
-  * Move this file to the same folder as your executable
+* Compile with Visual Studio
+* Move the executable to a folder and run it, this will create a file named _config.json_
+* Modify _config.json_ with your bot token and other settings
 
 ## Contributors
 * Affe130
