@@ -20,7 +20,8 @@ namespace DiscordBot
         public static Logger logger;
 
         public static string rootPath;
-        private static string configFilePath;
+        public static string configFilePath;
+        public static string downloadsPath;
         private static string logFilePath;
 
         static void Main(string[] args)
@@ -28,7 +29,12 @@ namespace DiscordBot
             rootPath = Directory.GetCurrentDirectory(); ;
             configFilePath = Path.Combine(rootPath, "config.json");
             logFilePath = Path.Combine(rootPath, "log.txt");
+            downloadsPath = Path.Combine(rootPath, "downloads");
             logger = new(logFilePath);
+            if (!Directory.Exists(downloadsPath))
+            {
+                Directory.CreateDirectory(downloadsPath);
+            }
             if (!File.Exists(configFilePath))
             {
                 settings = new();
@@ -65,7 +71,7 @@ namespace DiscordBot
             }
         } 
 
-        public async Task RunBotAsync()
+        private async Task RunBotAsync()
         {
             client = new DiscordSocketClient();
             commands = new CommandService();
@@ -88,7 +94,7 @@ namespace DiscordBot
             await Task.Delay(-1);
         }
 
-        public async Task RegisterCommandsAsync()
+        private async Task RegisterCommandsAsync()
         {
             client.MessageReceived += HandleCommandAsync;
             await commands.AddModulesAsync(Assembly.GetEntryAssembly(), services);
@@ -109,7 +115,7 @@ namespace DiscordBot
                 IResult result = await commands.ExecuteAsync(context, argPos, services);
                 if (!result.IsSuccess)
                 {
-                    logger.ConsoleLog(Logger.LogType.Error, $"Error: {result.Error} Reason: {result.ErrorReason}");
+                    logger.ConsoleLog(Logger.LogType.Error, $"{result.Error} Reason: {result.ErrorReason}");
                 }
             }
         }
