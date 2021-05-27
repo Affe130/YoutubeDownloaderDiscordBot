@@ -4,12 +4,12 @@ _You need to use the command prefix before any command_
 
 ## Admin commands:
 
-* ### status
+* ### status "new status"
 Sets the bots status
 
 _Example: !status !help_
 
-* ### prefix
+* ### prefix "new prefix"
 Sets the command prefix
 
 _Example: !prefix /_
