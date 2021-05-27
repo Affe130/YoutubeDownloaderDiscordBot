@@ -14,7 +14,7 @@ To install do the following:
 * Move the executable to a folder and run it, this will create a file named _config.json_
 * Modify _config.json_ with your bot token and other settings
 
-## [List of commands](https://github.com/Affe130/YoutubeDownloaderDiscordBot/COMMANDS.md)
+## [List of commands](https://github.com/Affe130/YoutubeDownloaderDiscordBot/blob/main/COMMANDS.md)
 
 ## Contributors
 * Affe130
