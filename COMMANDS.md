@@ -16,12 +16,12 @@ _Example: !prefix /_
 
 ## YouTube download commands:
 
-* ### download video "YouTube URL"
-Downloads and sends the video from the YouTube URL
+* ### download video "YouTube video URL"
+Sends a download link to the video
 
 _Example: !download video https://youtu.be/dQw4w9WgXcQ_
 
-* ### download sound "YouTube URL"
-Downloads and sends the sound from the YouTube URL
+* ### download sound "YouTube video URL"
+Sends a download link to the sound
 
 _Example: !download sound https://youtu.be/dQw4w9WgXcQ_
