@@ -22,11 +22,11 @@ namespace DiscordBot
         public static string rootPath;
         public static string configFilePath;
         public static string downloadsPath;
-        private static string logFilePath;
+        public static string logFilePath;
 
         static void Main(string[] args)
         {
-            rootPath = Directory.GetCurrentDirectory(); ;
+            rootPath = Directory.GetCurrentDirectory();
             configFilePath = Path.Combine(rootPath, "config.json");
             logFilePath = Path.Combine(rootPath, "log.txt");
             downloadsPath = Path.Combine(rootPath, "downloads");
