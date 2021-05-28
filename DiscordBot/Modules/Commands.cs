@@ -91,7 +91,7 @@ namespace DiscordBot.Modules
 
             var builder = new EmbedBuilder();
 
-            builder.WithTitle($"Downloading video...");
+            builder.WithTitle($"Downloading sound...");
             builder.AddField($"Link", video.Url, false);
             builder.AddField($"Channel", video.Author, false);
             builder.AddField($"Title", video.Title, false);

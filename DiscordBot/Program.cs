@@ -71,7 +71,7 @@ namespace DiscordBot
             try
             {
                 logger.ConsoleLog(Logger.LogType.Info, $"Connecting to FTP server...");
-                FtpClient ftpClient = new(settings.FtpHost);
+                ftpClient = new(settings.FtpHost);
                 ftpClient.Credentials = new NetworkCredential(settings.FtpUsername, settings.FtpPassword);
                 ftpClient.ConnectAsync();
             }
