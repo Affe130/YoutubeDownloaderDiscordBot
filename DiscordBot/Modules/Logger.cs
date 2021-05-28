@@ -26,17 +26,17 @@ namespace DiscordBot.Modules
 
         public void ConsoleLog(LogType logType, string message)
         {
-            Console.WriteLine($"{DateTime.Now.ToLongTimeString()} [{logType}] {message}");
+            Console.WriteLine($"{DateTime.Now} [{logType}] {message}");
         }
 
         public void FileLog(LogType logType, string message)
         {
-            File.AppendAllText(logFilePath, $"{DateTime.Now.ToLongTimeString()} [{logType}] {message}");
+            File.AppendAllText(logFilePath, $"{DateTime.Now} [{logType}] {message}");
         }
 
         public Task DiscordLog(LogMessage message)
         {
-            Console.WriteLine($"{DateTime.Now.ToLongTimeString()} [{LogType.Discord}] {message}");
+            Console.WriteLine($"{DateTime.Now} [{LogType.Discord}] {message}");
             return Task.CompletedTask;
         }
     }

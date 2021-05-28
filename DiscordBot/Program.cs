@@ -26,6 +26,7 @@ namespace DiscordBot
 
         static void Main(string[] args)
         {
+            Console.Title = "YoutubeDownloadDiscordBot";
             rootPath = Directory.GetCurrentDirectory();
             configFilePath = Path.Combine(rootPath, "config.json");
             logFilePath = Path.Combine(rootPath, "log.txt");
@@ -102,7 +103,7 @@ namespace DiscordBot
 
         private async Task HandleCommandAsync(SocketMessage arg)
         {
-            SocketUserMessage message = arg as SocketUserMessage;
+            var message = arg as SocketUserMessage;
             SocketCommandContext context = new(client, message);
             if (message.Author.IsBot)
             {
@@ -111,7 +112,7 @@ namespace DiscordBot
             int argPos = 0;
             if (message.HasStringPrefix(settings.CommandPrefix, ref argPos))
             {
-                logger.ConsoleLog(Logger.LogType.Info, $"Command: {message} Executed by {message.Author}");
+                logger.ConsoleLog(Logger.LogType.Info, $"Command: {message} executed by {message.Author}");
                 IResult result = await commands.ExecuteAsync(context, argPos, services);
                 if (!result.IsSuccess)
                 {
