@@ -19,6 +19,8 @@ namespace DiscordBot
         public static Settings settings;
         public static Logger logger;
 
+        public static FtpClient ftpClient;
+
         public static string rootPath;
         public static string configFilePath;
         public static string downloadsPath;
@@ -44,6 +46,9 @@ namespace DiscordBot
                 settings.BotToken = "BOT TOKEN";
                 settings.BotStatus = "!help";
                 settings.CommandPrefix = "!";
+                settings.FtpUsername = "FTP USERNAME";
+                settings.FtpPassword = "FTP PASSWORD";
+                settings.FtpHost = "FTP HOST";
                 settings.SaveToJson(configFilePath);
                 logger.ConsoleLog(Logger.LogType.Info, $"config.json was created in {rootPath} modify config.json with your bot token");
                 Console.ReadKey();
@@ -60,6 +65,7 @@ namespace DiscordBot
                 logger.ConsoleLog(Logger.LogType.Fatal, $"Could't load settings from config.json");
                 Console.ReadKey();
             }
+            ftpClient = new(settings.FtpHost, settings.FtpUsername, settings.FtpPassword);
             try
             {
                 logger.ConsoleLog(Logger.LogType.Info, $"Connecting to Discord...");

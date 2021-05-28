@@ -65,6 +65,14 @@ namespace DiscordBot.Modules
             await ReplyAsync("", false, builder.Build());
 
             await youtube.Videos.Streams.DownloadAsync(streamInfo, Path.Combine(Program.downloadsPath, $"{video.Title}.{streamInfo.Container}"));
+            try
+            {
+                await Program.ftpClient.UploadFile(Path.Combine(Program.downloadsPath, $"{video.Title}.{streamInfo.Container}"));
+            }
+            catch
+            {
+                Program.logger.ConsoleLog(Logger.LogType.Error, "FTP file upload failed");
+            }
             await ReplyAsync("Download Finished");
         }
 
@@ -90,6 +98,14 @@ namespace DiscordBot.Modules
             await ReplyAsync("", false, builder.Build());
 
             await youtube.Videos.Streams.DownloadAsync(streamInfo, Path.Combine(Program.downloadsPath, $"{video.Title}.{streamInfo.Container}"));
+            try
+            {
+                await Program.ftpClient.UploadFile(Path.Combine(Program.downloadsPath, $"{video.Title}.{streamInfo.Container}"));
+            }
+            catch
+            {
+                Program.logger.ConsoleLog(Logger.LogType.Error, "FTP file upload failed");
+            }
             await ReplyAsync($"Download Finished");
         }
     }

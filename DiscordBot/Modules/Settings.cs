@@ -9,6 +9,10 @@ namespace DiscordBot.Modules
         public string BotToken { get; set; }
         public string BotStatus { get; set; }
 
+        public string FtpUsername { get; set; }
+        public string FtpPassword { get; set; }
+        public string FtpHost { get; set; }
+
         public static Settings LoadFromJson(string filePath)
         {
             string json = File.ReadAllText(filePath);
