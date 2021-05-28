@@ -4,6 +4,8 @@ using System.IO;
 using System.Threading.Tasks;
 using YoutubeExplode;
 using YoutubeExplode.Videos.Streams;
+using FluentFTP;
+using System.Net;
 
 namespace DiscordBot.Modules
 {
@@ -67,13 +69,13 @@ namespace DiscordBot.Modules
             await youtube.Videos.Streams.DownloadAsync(streamInfo, Path.Combine(Program.downloadsPath, $"{video.Title}.{streamInfo.Container}"));
             try
             {
-                await Program.ftpClient.UploadFile(Path.Combine(Program.downloadsPath, $"{video.Title}.{streamInfo.Container}"));
+                await Program.ftpClient.UploadFileAsync($"{video.Title}.{streamInfo.Container}", $"/downloads/{video.Title}.{streamInfo.Container}");
             }
             catch
             {
                 Program.logger.ConsoleLog(Logger.LogType.Error, "FTP file upload failed");
             }
-            await ReplyAsync("Download Finished");
+            await ReplyAsync($"Download Finished, download link {Program.settings.FtpHost}/{video.Title}.{streamInfo.Container}");
         }
 
         [Command("download sound")]
@@ -100,13 +102,13 @@ namespace DiscordBot.Modules
             await youtube.Videos.Streams.DownloadAsync(streamInfo, Path.Combine(Program.downloadsPath, $"{video.Title}.{streamInfo.Container}"));
             try
             {
-                await Program.ftpClient.UploadFile(Path.Combine(Program.downloadsPath, $"{video.Title}.{streamInfo.Container}"));
+                await Program.ftpClient.UploadFileAsync($"{video.Title}.{streamInfo.Container}", $"/downloads/{video.Title}.{streamInfo.Container}");
             }
             catch
             {
                 Program.logger.ConsoleLog(Logger.LogType.Error, "FTP file upload failed");
             }
-            await ReplyAsync($"Download Finished");
+            await ReplyAsync($"Download Finished, download link {Program.settings.FtpHost}/{video.Title}.{streamInfo.Container}");
         }
     }
 }

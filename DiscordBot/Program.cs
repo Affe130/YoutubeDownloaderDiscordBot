@@ -7,6 +7,8 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using FluentFTP;
+using System.Net;
 
 namespace DiscordBot
 {
@@ -18,7 +20,6 @@ namespace DiscordBot
 
         public static Settings settings;
         public static Logger logger;
-
         public static FtpClient ftpClient;
 
         public static string rootPath;
@@ -29,15 +30,19 @@ namespace DiscordBot
         static void Main(string[] args)
         {
             Console.Title = "YoutubeDownloadDiscordBot";
+
             rootPath = Directory.GetCurrentDirectory();
             configFilePath = Path.Combine(rootPath, "config.json");
             logFilePath = Path.Combine(rootPath, "log.txt");
             downloadsPath = Path.Combine(rootPath, "downloads");
+
             logger = new(logFilePath);
+
             if (!Directory.Exists(downloadsPath))
             {
                 Directory.CreateDirectory(downloadsPath);
             }
+
             if (!File.Exists(configFilePath))
             {
                 settings = new();
@@ -65,7 +70,20 @@ namespace DiscordBot
                 logger.ConsoleLog(Logger.LogType.Fatal, $"Could't load settings from config.json");
                 Console.ReadKey();
             }
-            ftpClient = new(settings.FtpHost, settings.FtpUsername, settings.FtpPassword);
+            try
+            {
+                FtpClient ftpClient = new FtpClient(settings.FtpHost);
+                ftpClient.Credentials = new NetworkCredential(settings.FtpUsername, settings.FtpPassword);
+                logger.ConsoleLog(Logger.LogType.Info, $"Connecting to FTP server...");
+                ftpClient.ConnectAsync();
+            }
+            catch
+            {
+                logger.ConsoleLog(Logger.LogType.Fatal, $"Could't connect to FTP server");
+                Console.ReadKey();
+
+                return;
+            }
             try
             {
                 logger.ConsoleLog(Logger.LogType.Info, $"Connecting to Discord...");
@@ -75,6 +93,8 @@ namespace DiscordBot
             {
                 logger.ConsoleLog(Logger.LogType.Fatal, $"Could't connect to Discord");
                 Console.ReadKey();
+
+                return;
             }
         } 
 
