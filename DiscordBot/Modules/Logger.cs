@@ -27,6 +27,7 @@ namespace DiscordBot.Modules
         public void ConsoleLog(LogType logType, string message)
         {
             Console.WriteLine($"{DateTime.Now} [{logType}] {message}");
+            FileLog(logType, message);
         }
 
         public void FileLog(LogType logType, string message)
@@ -37,6 +38,7 @@ namespace DiscordBot.Modules
         public Task DiscordLog(LogMessage message)
         {
             Console.WriteLine($"{DateTime.Now} [{LogType.Discord}] {message}");
+            FileLog(LogType.Discord, message.ToString());
             return Task.CompletedTask;
         }
     }
