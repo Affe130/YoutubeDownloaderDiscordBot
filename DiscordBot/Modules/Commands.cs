@@ -66,16 +66,19 @@ namespace DiscordBot.Modules
 
             await ReplyAsync("", false, builder.Build());
 
-            await youtube.Videos.Streams.DownloadAsync(streamInfo, Path.Combine(Program.downloadsPath, $"{video.Title}.{streamInfo.Container}"));
+            string fileName = $"{video.Title}.{streamInfo.Container}";
+            string filePath = Path.Combine(Program.downloadsPath, fileName);
+
+            await youtube.Videos.Streams.DownloadAsync(streamInfo, filePath);
             try
             {
-                await Program.ftpClient.UploadFileAsync($"{video.Title}.{streamInfo.Container}", $"/downloads/{video.Title}.{streamInfo.Container}");
+                await Program.ftpClient.UploadFileAsync(filePath, $"/downloads/{fileName}");
             }
             catch
             {
-                Program.logger.ConsoleLog(Logger.LogType.Error, "FTP file upload failed");
+                Program.logger.ConsoleLog(Logger.LogType.Error, $"FTP upload of {fileName} failed");
             }
-            await ReplyAsync($"Download Finished, download link {Program.settings.FtpHost}/{video.Title}.{streamInfo.Container}");
+            await ReplyAsync($"Download finished, download link: {Program.settings.WebsiteFolderURL}/{fileName}");
         }
 
         [Command("download sound")]
@@ -99,16 +102,19 @@ namespace DiscordBot.Modules
 
             await ReplyAsync("", false, builder.Build());
 
-            await youtube.Videos.Streams.DownloadAsync(streamInfo, Path.Combine(Program.downloadsPath, $"{video.Title}.{streamInfo.Container}"));
+            string fileName = $"{video.Title}.{streamInfo.Container}";
+            string filePath = Path.Combine(Program.downloadsPath, fileName);
+
+            await youtube.Videos.Streams.DownloadAsync(streamInfo, filePath);
             try
             {
-                await Program.ftpClient.UploadFileAsync($"{video.Title}.{streamInfo.Container}", $"/downloads/{video.Title}.{streamInfo.Container}");
+                await Program.ftpClient.UploadFileAsync(filePath, $"/downloads/{fileName}");
             }
             catch
             {
-                Program.logger.ConsoleLog(Logger.LogType.Error, "FTP file upload failed");
+                Program.logger.ConsoleLog(Logger.LogType.Error, $"FTP upload of {fileName} failed");
             }
-            await ReplyAsync($"Download Finished, download link {Program.settings.FtpHost}/{video.Title}.{streamInfo.Container}");
+            await ReplyAsync($"Download finished, download link: {Program.settings.WebsiteFolderURL}/{fileName}");
         }
     }
 }

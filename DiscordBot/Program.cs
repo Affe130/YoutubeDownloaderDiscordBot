@@ -24,8 +24,8 @@ namespace DiscordBot
 
         public static string rootPath;
         public static string configFilePath;
-        public static string downloadsPath;
         public static string logFilePath;
+        public static string downloadsPath;
 
         static void Main(string[] args)
         {
@@ -45,21 +45,16 @@ namespace DiscordBot
 
             if (!File.Exists(configFilePath))
             {
-                settings = new();
                 logger.ConsoleLog(Logger.LogType.Error, $"config.json was not found");
                 logger.ConsoleLog(Logger.LogType.Info, $"Creating config.json...");
-                settings.BotToken = "BOT TOKEN";
-                settings.BotStatus = "!help";
-                settings.CommandPrefix = "!";
-                settings.FtpUsername = "FTP USERNAME";
-                settings.FtpPassword = "FTP PASSWORD";
-                settings.FtpHost = "FTP HOST";
-                settings.SaveToJson(configFilePath);
+                settings = new();
+                settings.SetToStandard(configFilePath);
                 logger.ConsoleLog(Logger.LogType.Info, $"config.json was created in {rootPath} modify config.json with your bot token");
                 Console.ReadKey();
 
                 return;
             }
+
             try
             {
                 logger.ConsoleLog(Logger.LogType.Info, $"Loading settings...");
@@ -69,12 +64,15 @@ namespace DiscordBot
             {
                 logger.ConsoleLog(Logger.LogType.Fatal, $"Could't load settings from config.json");
                 Console.ReadKey();
+
+                return;
             }
+
             try
             {
-                FtpClient ftpClient = new FtpClient(settings.FtpHost);
-                ftpClient.Credentials = new NetworkCredential(settings.FtpUsername, settings.FtpPassword);
                 logger.ConsoleLog(Logger.LogType.Info, $"Connecting to FTP server...");
+                FtpClient ftpClient = new(settings.FtpHost);
+                ftpClient.Credentials = new NetworkCredential(settings.FtpUsername, settings.FtpPassword);
                 ftpClient.ConnectAsync();
             }
             catch
@@ -84,6 +82,7 @@ namespace DiscordBot
 
                 return;
             }
+
             try
             {
                 logger.ConsoleLog(Logger.LogType.Info, $"Connecting to Discord...");

@@ -7,7 +7,7 @@ namespace DiscordBot.Modules
 {
     class Logger
     {
-        private string logFilePath;
+        private string LogFilePath;
 
         public enum LogType
         {
@@ -21,7 +21,7 @@ namespace DiscordBot.Modules
 
         public Logger(string filePath)
         {
-            logFilePath = filePath;
+            LogFilePath = filePath;
         }
 
         public void ConsoleLog(LogType logType, string message)
@@ -32,7 +32,7 @@ namespace DiscordBot.Modules
 
         public void FileLog(LogType logType, string message)
         {
-            File.AppendAllText(logFilePath, $"{DateTime.Now} [{logType}] {message}");
+            File.AppendAllText(LogFilePath, $"{DateTime.Now} [{logType}] {message}");
         }
 
         public Task DiscordLog(LogMessage message)
