@@ -13,7 +13,7 @@ namespace DiscordBot.Modules
         public string FtpUsername { get; set; }
         public string FtpPassword { get; set; }
 
-        public string WebsiteFolderURL { get; set; }
+        public string WebsiteURL { get; set; }
 
         public static Settings LoadFromJson(string filePath)
         {
@@ -37,7 +37,7 @@ namespace DiscordBot.Modules
             FtpUsername = "FTP USERNAME";
             FtpPassword = "FTP PASSWORD";
 
-            WebsiteFolderURL = "WEBSITE FOLDER URL";
+            WebsiteURL = "WEBSITE URL";
             this.SaveToJson(filePath);
         }
     }

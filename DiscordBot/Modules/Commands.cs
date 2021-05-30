@@ -78,7 +78,7 @@ namespace DiscordBot.Modules
             {
                 Program.logger.ConsoleLog(Logger.LogType.Error, $"FTP upload of {fileName} failed");
             }
-            await ReplyAsync($"Download finished, download link: {Program.settings.WebsiteFolderURL}/{fileName}");
+            await ReplyAsync($"Download finished, download link: {Program.settings.WebsiteURL}/downloads/{fileName}");
         }
 
         [Command("download sound")]
@@ -114,7 +114,7 @@ namespace DiscordBot.Modules
             {
                 Program.logger.ConsoleLog(Logger.LogType.Error, $"FTP upload of {fileName} failed");
             }
-            await ReplyAsync($"Download finished, download link: {Program.settings.WebsiteFolderURL}/{fileName}");
+            await ReplyAsync($"Download finished, download link: {Program.settings.WebsiteURL}/downloads/{fileName}");
         }
     }
 }
