@@ -4,7 +4,6 @@ using System.IO;
 using System.Threading.Tasks;
 using YoutubeExplode;
 using YoutubeExplode.Videos.Streams;
-using FluentFTP;
 using System.Net;
 
 namespace DiscordBot.Modules
@@ -70,15 +69,7 @@ namespace DiscordBot.Modules
             string filePath = Path.Combine(Program.downloadsPath, fileName);
 
             await youtube.Videos.Streams.DownloadAsync(streamInfo, filePath);
-            try
-            {
-                await Program.ftpClient.UploadFileAsync(filePath, $"/downloads/{fileName}");
-            }
-            catch
-            {
-                Program.logger.ConsoleLog(Logger.LogType.Error, $"FTP upload of {fileName} failed");
-            }
-            await ReplyAsync($"Download finished, download link: {Program.settings.WebsiteURL}/downloads/{fileName}");
+            await ReplyAsync($"Download finished, download link: ");
         }
 
         [Command("download sound")]
@@ -106,15 +97,7 @@ namespace DiscordBot.Modules
             string filePath = Path.Combine(Program.downloadsPath, fileName);
 
             await youtube.Videos.Streams.DownloadAsync(streamInfo, filePath);
-            try
-            {
-                await Program.ftpClient.UploadFileAsync(filePath, $"/downloads/{fileName}");
-            }
-            catch
-            {
-                Program.logger.ConsoleLog(Logger.LogType.Error, $"FTP upload of {fileName} failed");
-            }
-            await ReplyAsync($"Download finished, download link: {Program.settings.WebsiteURL}/downloads/{fileName}");
+            await ReplyAsync($"Download finished, download link: ");
         }
     }
 }

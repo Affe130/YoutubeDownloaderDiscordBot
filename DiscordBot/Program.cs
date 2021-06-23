@@ -7,7 +7,6 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
-using FluentFTP;
 using System.Net;
 
 namespace DiscordBot
@@ -20,7 +19,6 @@ namespace DiscordBot
 
         public static Settings settings;
         public static Logger logger;
-        public static FtpClient ftpClient;
 
         public static string rootPath;
         public static string configFilePath;
@@ -48,7 +46,7 @@ namespace DiscordBot
                 logger.ConsoleLog(Logger.LogType.Error, $"config.json was not found");
                 logger.ConsoleLog(Logger.LogType.Info, $"Creating config.json...");
                 settings = new();
-                settings.SetToStandard(configFilePath);
+                settings.SetToDefault(configFilePath);
                 logger.ConsoleLog(Logger.LogType.Info, $"config.json was created in {rootPath} modify config.json with your bot token");
                 Console.ReadKey();
 
@@ -63,21 +61,6 @@ namespace DiscordBot
             catch
             {
                 logger.ConsoleLog(Logger.LogType.Fatal, $"Could't load settings from config.json");
-                Console.ReadKey();
-
-                return;
-            }
-
-            try
-            {
-                logger.ConsoleLog(Logger.LogType.Info, $"Connecting to {Program.settings.FtpHost} {Program.settings.FtpUsername} {Program.settings.FtpPassword}...");
-                ftpClient = new(settings.FtpHost);
-                ftpClient.Credentials = new NetworkCredential(settings.FtpUsername, settings.FtpPassword);
-                ftpClient.Connect();
-            }
-            catch
-            {
-                logger.ConsoleLog(Logger.LogType.Fatal, $"Could't connect to FTP server");
                 Console.ReadKey();
 
                 return;

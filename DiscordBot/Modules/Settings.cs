@@ -9,11 +9,7 @@ namespace DiscordBot.Modules
         public string BotToken { get; set; }
         public string BotStatus { get; set; }
 
-        public string FtpHost { get; set; }
-        public string FtpUsername { get; set; }
-        public string FtpPassword { get; set; }
-
-        public string WebsiteURL { get; set; }
+        public string GoogleDriveToken;
 
         public static Settings LoadFromJson(string filePath)
         {
@@ -27,17 +23,12 @@ namespace DiscordBot.Modules
             File.WriteAllText(filePath, json);
         }
 
-        public void SetToStandard(string filePath)
+        public void SetToDefault(string filePath)
         {
             CommandPrefix = "!";
             BotToken = "BOT TOKEN";
             BotStatus = "!help";
-
-            FtpHost = "FTP HOST";
-            FtpUsername = "FTP USERNAME";
-            FtpPassword = "FTP PASSWORD";
-
-            WebsiteURL = "WEBSITE URL";
+            GoogleDriveToken = "GOOGLE DRIVE TOKEN";
             this.SaveToJson(filePath);
         }
     }
