@@ -9,8 +9,6 @@ namespace DiscordBot.Modules
         public string BotToken { get; set; }
         public string BotStatus { get; set; }
 
-        public string GoogleDriveToken;
-
         public static Settings LoadFromJson(string filePath)
         {
             string json = File.ReadAllText(filePath);
@@ -28,7 +26,6 @@ namespace DiscordBot.Modules
             CommandPrefix = "!";
             BotToken = "BOT TOKEN";
             BotStatus = "!help";
-            GoogleDriveToken = "GOOGLE DRIVE TOKEN";
             this.SaveToJson(filePath);
         }
     }

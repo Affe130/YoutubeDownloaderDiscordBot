@@ -97,7 +97,6 @@ namespace DiscordBot
             await RegisterCommandsAsync();
 
             await client.LoginAsync(TokenType.Bot, settings.BotToken);
-
             await client.StartAsync();
 
             await Task.Delay(-1);
@@ -111,7 +110,7 @@ namespace DiscordBot
 
         private async Task HandleCommandAsync(SocketMessage arg)
         {
-            var message = arg as SocketUserMessage;
+            SocketUserMessage message = arg as SocketUserMessage;
             SocketCommandContext context = new(client, message);
             if (message.Author.IsBot)
             {

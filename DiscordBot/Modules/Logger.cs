@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace DiscordBot.Modules
+namespace DiscordBot
 {
     class Logger
     {
@@ -37,8 +37,7 @@ namespace DiscordBot.Modules
 
         public Task DiscordLog(LogMessage message)
         {
-            Console.WriteLine($"{DateTime.Now} [{LogType.Discord}] {message}");
-            FileLog(LogType.Discord, message.ToString());
+            ConsoleLog(LogType.Discord, message.ToString());
             return Task.CompletedTask;
         }
     }

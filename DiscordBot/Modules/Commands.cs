@@ -10,6 +10,12 @@ namespace DiscordBot.Modules
 {
     public class Commands : ModuleBase<SocketCommandContext>
     {
+        public enum DownloadType
+        {
+            video,
+            sound
+        }
+
         [Command("help")]
         public async Task Help()
         {
@@ -22,7 +28,6 @@ namespace DiscordBot.Modules
             builder.AddField($"download video 'YouTube video URL'", "Sends a download link to the video", false);
             builder.AddField($"download sound 'YouTube video URL'", "Sends a download link to the sound", false);
             builder.AddField($"For more documentation and source code visit", "https://github.com/Affe130/YoutubeDownloaderDiscordBot", false);
-
             builder.WithColor(Color.Green);
 
             await ReplyAsync("", false, builder.Build());
@@ -33,7 +38,7 @@ namespace DiscordBot.Modules
         {
             Program.settings.CommandPrefix = prefix;
             Program.settings.SaveToJson(Program.configFilePath);
-            await ReplyAsync($"Command prefix was set to '{prefix}'");
+            await ReplyAsync($"Command prefix was set to {prefix}");
         }
 
         [Command("status")]
@@ -42,62 +47,56 @@ namespace DiscordBot.Modules
             Program.settings.BotStatus = status;
             Program.settings.SaveToJson(Program.configFilePath);
             await Context.Client.SetGameAsync(status);
-            await ReplyAsync($"Bot status was set to '{status}'");
+            await ReplyAsync($"Bot status was set to {status}");
         }
 
         [Command("download video")]
         public async Task DownloadYoutubeVideo(string url)
         {
-            var youtube = new YoutubeClient();
-            var video = await youtube.Videos.GetAsync(url);
-            var streamManifest = await youtube.Videos.Streams.GetManifestAsync(url);
-            var streamInfo = streamManifest.GetMuxedStreams().GetWithHighestVideoQuality();
+            YoutubeClient youtube = new();
+            YoutubeExplode.Videos.Video video = await youtube.Videos.GetAsync(url);
+            StreamManifest streamManifest = await youtube.Videos.Streams.GetManifestAsync(url);
+            IVideoStreamInfo streamInfo = streamManifest.GetMuxedStreams().GetWithHighestVideoQuality();
 
-            var builder = new EmbedBuilder();
-
-            builder.WithTitle("Downloading video...");
-            builder.AddField("Link", video.Url, false);
-            builder.AddField("Channel", video.Author, false);
-            builder.AddField("Title", video.Title, false);
-            builder.AddField("Description", video.Description, false);
-
-            builder.WithColor(Color.Red);
-
-            await ReplyAsync("", false, builder.Build());
+            await SendDownloadInfo(video, DownloadType.video);
 
             string fileName = $"{video.Title}.{streamInfo.Container}";
             string filePath = Path.Combine(Program.downloadsPath, fileName);
 
             await youtube.Videos.Streams.DownloadAsync(streamInfo, filePath);
-            await ReplyAsync($"Download finished, download link: ");
+            await ReplyAsync($"Download finished, download link: {filePath}");
         }
 
         [Command("download sound")]
         public async Task YoutubeDownloadSound(string url)
         {
-            var youtube = new YoutubeClient();
-            var video = await youtube.Videos.GetAsync(url);
-            var streamManifest = await youtube.Videos.Streams.GetManifestAsync(url);
-            var streamInfo = streamManifest.GetAudioOnlyStreams().GetWithHighestBitrate();
+            YoutubeClient youtube = new YoutubeClient();
+            YoutubeExplode.Videos.Video video = await youtube.Videos.GetAsync(url);
+            StreamManifest streamManifest = await youtube.Videos.Streams.GetManifestAsync(url);
+            IStreamInfo streamInfo = streamManifest.GetAudioOnlyStreams().GetWithHighestBitrate();
 
-            var builder = new EmbedBuilder();
-
-            builder.WithTitle($"Downloading sound...");
-            builder.AddField($"Link", video.Url, false);
-            builder.AddField($"Channel", video.Author, false);
-            builder.AddField($"Title", video.Title, false);
-            builder.AddField($"Duration", video.Duration, false);
-            builder.AddField($"Description", video.Description, false);
-
-            builder.WithColor(Color.Red);
-
-            await ReplyAsync("", false, builder.Build());
+            await SendDownloadInfo(video, DownloadType.sound);
 
             string fileName = $"{video.Title}.{streamInfo.Container}";
             string filePath = Path.Combine(Program.downloadsPath, fileName);
 
             await youtube.Videos.Streams.DownloadAsync(streamInfo, filePath);
-            await ReplyAsync($"Download finished, download link: ");
+            await ReplyAsync($"Download finished, download link: {filePath}");
+        }
+
+        private async Task SendDownloadInfo(YoutubeExplode.Videos.Video video, DownloadType type)
+        {
+            var builder = new EmbedBuilder();
+
+            builder.WithTitle($"Downloading {type}...");
+            builder.AddField($"Title", video.Title, false);
+            builder.AddField($"Channel", video.Author, false);
+            builder.AddField($"Link", video.Url, false);
+            builder.AddField($"Duration", video.Duration, false);
+            builder.AddField($"Description", video.Description, false);
+            builder.WithColor(Color.Red);
+
+            await ReplyAsync("", false, builder.Build());
         }
     }
 }
