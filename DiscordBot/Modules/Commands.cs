@@ -64,7 +64,15 @@ namespace DiscordBot.Modules
             string filePath = Path.Combine(Program.downloadsPath, fileName);
 
             await youtube.Videos.Streams.DownloadAsync(streamInfo, filePath);
-            await ReplyAsync($"Download finished, download link: {filePath}");
+
+            try
+            {
+                await Context.Channel.SendFileAsync(filePath);
+            }
+            catch
+            {
+                await ReplyAsync($"Sorry the file is too big, maximum is {Context.Guild.MaxUploadLimit} MB!");
+            }
         }
 
         [Command("download sound")]
@@ -81,7 +89,15 @@ namespace DiscordBot.Modules
             string filePath = Path.Combine(Program.downloadsPath, fileName);
 
             await youtube.Videos.Streams.DownloadAsync(streamInfo, filePath);
-            await ReplyAsync($"Download finished, download link: {filePath}");
+
+            try
+            {
+                await Context.Channel.SendFileAsync(filePath);
+            }
+            catch
+            {
+                await ReplyAsync($"Sorry the file is too big, maximum is {Context.Guild.MaxUploadLimit} MB!");
+            }
         }
 
         private async Task SendDownloadInfo(YoutubeExplode.Videos.Video video, DownloadType type)
@@ -93,7 +109,10 @@ namespace DiscordBot.Modules
             builder.AddField($"Channel", video.Author, false);
             builder.AddField($"Link", video.Url, false);
             builder.AddField($"Duration", video.Duration, false);
-            builder.AddField($"Description", video.Description, false);
+            if (video.Description.Length >= 0)
+            {
+                builder.AddField($"Description", video.Description, false);
+            }
             builder.WithColor(Color.Red);
 
             await ReplyAsync("", false, builder.Build());
