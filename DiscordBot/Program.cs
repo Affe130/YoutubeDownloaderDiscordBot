@@ -25,7 +25,7 @@ namespace DiscordBot
         public static string logFilePath;
         public static string downloadsPath;
 
-        static void Main(string[] args)
+        static void Main()
         {
             Console.Title = "YoutubeDownloadDiscordBot";
 

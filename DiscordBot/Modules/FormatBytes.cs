@@ -8,7 +8,7 @@ namespace DiscordBot.Modules
 {
     static class FormatBytes
     {
-        public static string FormatBytesWithPrefix(ulong len)
+        public static string FormatBytesWithSuffix(ulong len)
         {
             string[] sizes = { "B", "kB", "MB", "GB", "TB" };
             int order = 0;

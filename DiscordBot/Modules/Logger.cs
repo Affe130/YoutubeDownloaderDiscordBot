@@ -7,7 +7,7 @@ namespace DiscordBot
 {
     class Logger
     {
-        private string LogFilePath;
+        private readonly string LogFilePath;
 
         public enum LogType
         {

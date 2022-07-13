@@ -68,16 +68,16 @@ namespace DiscordBot.Modules
             }
             catch
             {
-                await ReplyAsync($"Sorry the file is too big, maximum is {FormatBytes.FormatBytesWithPrefix(Context.Guild.MaxUploadLimit)}!");
+                await ReplyAsync($"Sorry the file is too big, maximum is {FormatBytes.FormatBytesWithSuffix(Context.Guild.MaxUploadLimit)}!");
             }
         }
 
         [Command("download sound")]
         public async Task YoutubeDownloadSound(string url)
         {
-            YoutubeClient youtube = new YoutubeClient();
+            YoutubeClient youtube = new();
 
-            var video = await youtube.Videos.GetAsync("https://youtube.com/watch?v=u_yIGGhubZs");
+            var video = await youtube.Videos.GetAsync(url);
 
             await SendDownloadInfo(video, DownloadType.Sound);
 
@@ -92,7 +92,7 @@ namespace DiscordBot.Modules
             }
             catch
             {
-                await ReplyAsync($"Sorry the file is too big, maximum is {FormatBytes.FormatBytesWithPrefix(Context.Guild.MaxUploadLimit)}!");
+                await ReplyAsync($"Sorry the file is too big, maximum is {FormatBytes.FormatBytesWithSuffix(Context.Guild.MaxUploadLimit)}!");
             }
         }
 
