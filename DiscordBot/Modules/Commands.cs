@@ -3,8 +3,7 @@ using Discord.Commands;
 using System.IO;
 using System.Threading.Tasks;
 using YoutubeExplode;
-using YoutubeExplode.Videos.Streams;
-using System.Net;
+using YoutubeExplode.Converter;
 
 namespace DiscordBot.Modules
 {
@@ -12,8 +11,8 @@ namespace DiscordBot.Modules
     {
         public enum DownloadType
         {
-            video,
-            sound
+            Video,
+            Sound
         }
 
         [Command("help")]
@@ -55,15 +54,13 @@ namespace DiscordBot.Modules
         {
             YoutubeClient youtube = new();
             YoutubeExplode.Videos.Video video = await youtube.Videos.GetAsync(url);
-            StreamManifest streamManifest = await youtube.Videos.Streams.GetManifestAsync(url);
-            IVideoStreamInfo streamInfo = streamManifest.GetMuxedStreams().GetWithHighestVideoQuality();
 
-            await SendDownloadInfo(video, DownloadType.video);
+            await SendDownloadInfo(video, DownloadType.Video);
 
-            string fileName = $"{video.Title}.{streamInfo.Container}";
+            string fileName = $"video.mp4";
             string filePath = Path.Combine(Program.downloadsPath, fileName);
 
-            await youtube.Videos.Streams.DownloadAsync(streamInfo, filePath);
+            await youtube.Videos.DownloadAsync(url, filePath);
 
             try
             {
@@ -71,7 +68,7 @@ namespace DiscordBot.Modules
             }
             catch
             {
-                await ReplyAsync($"Sorry the file is too big, maximum is {Context.Guild.MaxUploadLimit} MB!");
+                await ReplyAsync($"Sorry the file is too big, maximum is {FormatBytes.FormatBytesWithPrefix(Context.Guild.MaxUploadLimit)}!");
             }
         }
 
@@ -79,16 +76,15 @@ namespace DiscordBot.Modules
         public async Task YoutubeDownloadSound(string url)
         {
             YoutubeClient youtube = new YoutubeClient();
-            YoutubeExplode.Videos.Video video = await youtube.Videos.GetAsync(url);
-            StreamManifest streamManifest = await youtube.Videos.Streams.GetManifestAsync(url);
-            IStreamInfo streamInfo = streamManifest.GetAudioOnlyStreams().GetWithHighestBitrate();
 
-            await SendDownloadInfo(video, DownloadType.sound);
+            var video = await youtube.Videos.GetAsync("https://youtube.com/watch?v=u_yIGGhubZs");
 
-            string fileName = $"{video.Title}.{streamInfo.Container}";
+            await SendDownloadInfo(video, DownloadType.Sound);
+
+            string fileName = $"sound.mp3";
             string filePath = Path.Combine(Program.downloadsPath, fileName);
 
-            await youtube.Videos.Streams.DownloadAsync(streamInfo, filePath);
+            await youtube.Videos.DownloadAsync(url, filePath);
 
             try
             {
@@ -96,7 +92,7 @@ namespace DiscordBot.Modules
             }
             catch
             {
-                await ReplyAsync($"Sorry the file is too big, maximum is {Context.Guild.MaxUploadLimit} MB!");
+                await ReplyAsync($"Sorry the file is too big, maximum is {FormatBytes.FormatBytesWithPrefix(Context.Guild.MaxUploadLimit)}!");
             }
         }
 
@@ -104,12 +100,13 @@ namespace DiscordBot.Modules
         {
             var builder = new EmbedBuilder();
 
-            builder.WithTitle($"Downloading {type}...");
+            builder.WithTitle($"Downloading {type.ToString().ToLower()}...");
+            builder.WithImageUrl(video.Thumbnails[0].Url);
             builder.AddField($"Title", video.Title, false);
             builder.AddField($"Channel", video.Author, false);
             builder.AddField($"Link", video.Url, false);
             builder.AddField($"Duration", video.Duration, false);
-            if (video.Description.Length >= 0)
+            if (video.Description.Length >= 1 && video.Description.Length <= 1024)
             {
                 builder.AddField($"Description", video.Description, false);
             }
